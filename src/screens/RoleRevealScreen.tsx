@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         color: '#f6eefb',
         marginBottom: 16,
-        paddingBottom: 1
+        paddingBottom: 3
     },
     roleHint: {
         fontSize: 14,

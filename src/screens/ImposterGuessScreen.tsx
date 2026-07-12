@@ -35,7 +35,7 @@ export default function ImposterGuessScreen({ navigation }: any) {
                     if (db) {
                         // Fetch 7 random words from the same category that are NOT the secret word
                         const results = await db.getAllAsync<{ word: string }>(
-                            'SELECT word FROM words WHERE category_id = ? AND word != ? ORDER BY RANDOM() LIMIT 7',
+                            'SELECT word FROM words WHERE category_id = ? AND word != ? ORDER BY RANDOM() LIMIT 9',
                             [selectedCategoryId, secretWord]
                         );
 
