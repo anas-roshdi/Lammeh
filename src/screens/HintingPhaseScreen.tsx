@@ -144,7 +144,7 @@ export default function HintingPhaseScreen({ navigation }: any) {
                             <Text style={styles.playerName}>{currentPlayer}</Text>
 
                             <Text style={styles.instructionText}>
-                                أعطِ تلميحاً من كلمة واحدة يدل على الكلمة السرية دون كشفها للدخلاء.
+                                أعطِ تلميحاً من كلمة واحدة يدل على الكلمة السرية دون كشفها للضائعين.
                             </Text>
 
                         </Animated.View>
@@ -306,6 +306,7 @@ const styles = StyleSheet.create({
         color: '#b9a6cc',
         fontSize: 14,
         fontWeight: '600',
+        paddingBottom: 1
     },
     playerName: {
         fontSize: 54,
@@ -313,6 +314,7 @@ const styles = StyleSheet.create({
         color: '#f6eefb',
         marginBottom: 24,
         textAlign: 'center',
+        paddingBottom: 4
     },
     instructionText: {
         fontSize: 14,

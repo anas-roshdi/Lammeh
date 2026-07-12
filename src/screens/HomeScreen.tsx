@@ -63,6 +63,7 @@ export default function HomeScreen({ navigation }: any) {
       {/* Footer Version Info */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>الإصدار ١.٠ — العب مع أصدقائك</Text>
+        <Text style={styles.footerText}>Created by Anoosyhero</Text>
       </View>
       <SettingsModal
         visible={isSettingsVisible}
@@ -167,5 +168,6 @@ const styles = StyleSheet.create({
     color: '#b9a6cc',
     fontSize: 12,
     fontWeight: '500',
+    paddingBottom: 5
   },
 });

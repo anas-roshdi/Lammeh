@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         color: '#f6eefb',
         marginBottom: 4,
+        paddingBottom: 4
     },
     subtitle: {
         fontSize: 16,
@@ -222,6 +223,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#f6eefb',
         textAlign: 'right',
+        paddingBottom: 2
     },
     topPlayerName: {
         fontSize: 20,

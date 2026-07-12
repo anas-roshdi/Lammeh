@@ -103,7 +103,7 @@ export default function ImposterRevealScreen({ navigation }: any) {
 
                                 {/* يتغير النص هنا تلقائياً حسب العدد */}
                                 <Text style={styles.revealSubtitle}>
-                                    {isMultiple ? "الـضـايـعـيـن هـم..." : "الـضـايـع هـو..."}
+                                    {isMultiple ? "الـضـائـعـيـن هـم..." : "الـضـائـع هـو..."}
                                 </Text>
 
                                 {/* عرض الأسماء ديناميكياً */}
@@ -238,6 +238,7 @@ const styles = StyleSheet.create({
         color: 'rgba(246, 238, 251, 0.8)',
         marginBottom: 16,
         letterSpacing: 2,
+        paddingBottom: 1
     },
     namesContainer: {
         alignItems: 'center',
@@ -249,6 +250,7 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         color: '#ffffff',
         textAlign: 'center',
+        paddingBottom: 10
     },
     singleNameStyle: {
         fontSize: 60,

@@ -88,7 +88,7 @@ export default function RoleRevealScreen({ navigation }: any) {
 
     const PLAYER = {
         name: currentPlayerName,
-        role: isImposter ? "الضايع" : localSecretWord,
+        role: isImposter ? "الضائع" : localSecretWord,
         roleHint: isImposter
             ? "اكتشف الكلمة السرية دون أن ينكشف أمرك"
             : "أنت داخل السالفة، لمح لها بذكاء",
@@ -207,10 +207,6 @@ export default function RoleRevealScreen({ navigation }: any) {
                             )}
                             {revealed ? (
                                 <View style={styles.revealedContent}>
-                                    <View style={styles.revealedBadge}>
-                                        <Eye size={14} color="#4ecca3" />
-                                        <Text style={styles.revealedBadgeText}>دورك السري</Text>
-                                    </View>
                                     <Text style={styles.roleText}>{PLAYER.role}</Text>
                                     <Text style={styles.roleHint}>{PLAYER.roleHint}</Text>
                                     <View style={styles.warningContainer}>
@@ -337,6 +333,7 @@ const styles = StyleSheet.create({
         fontSize: 36,
         fontWeight: '900',
         color: '#f6eefb',
+        paddingBottom: 2
     },
     cardWrapper: {
         width: '100%',
@@ -406,26 +403,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         zIndex: 1,
     },
-    revealedBadge: {
-        flexDirection: 'row-reverse',
-        alignItems: 'center',
-        backgroundColor: 'rgba(78, 204, 163, 0.15)',
-        paddingHorizontal: 12,
-        paddingVertical: 4,
-        borderRadius: 16,
-        gap: 8,
-        marginBottom: 16,
-    },
-    revealedBadgeText: {
-        color: '#4ecca3',
-        fontSize: 12,
-        fontWeight: 'bold',
-    },
+
     roleText: {
         fontSize: 48,
         fontWeight: '900',
         color: '#f6eefb',
         marginBottom: 16,
+        paddingBottom: 1
     },
     roleHint: {
         fontSize: 14,

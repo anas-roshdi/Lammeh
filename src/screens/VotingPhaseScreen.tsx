@@ -190,10 +190,12 @@ const styles = StyleSheet.create({
         color: '#ff7315',
         marginBottom: 16,
         textAlign: 'center',
+        paddingBottom: 2
     },
     voterSubtitle: {
         fontSize: 16,
         color: '#f6eefb',
+        paddingBottom: 1
     },
     candidatesScroll: {
         flex: 1,
@@ -216,5 +218,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#f6eefb',
+        paddingBottom: 1
     },
 });

@@ -1,28 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 
 export const GameTitle = () => {
   return (
     <View style={styles.container}>
-      {/* Detective / hint mascot mark */}
-      <View style={styles.mascotBox}>
-        <View style={styles.questionBadge}>
-          <Text style={styles.questionText}>؟</Text>
-        </View>
+      {/* Display the newly adopted logo image */}
+      <Image
+        source={require('../../assets/icon.png')} // Adjust path if your components folder is structured differently
+        style={styles.logoImage}
+        resizeMode="contain"
+      />
 
-        {/* Two peeking eyes */}
-        <View style={styles.eyesContainer}>
-          <View style={styles.eyeBg}>
-            <View style={styles.eyePupil} />
-          </View>
-          <View style={styles.eyeBg}>
-            <View style={styles.eyePupil} />
-          </View>
-        </View>
-      </View>
 
-      {/* Main Arabic Title */}
-      <Text style={styles.mainTitle}>لمّح</Text>
 
       {/* English subtitle with decorative lines */}
       <View style={styles.subtitleContainer}>
@@ -44,59 +33,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
   },
-  mascotBox: {
-    width: 80,
-    height: 80,
-    backgroundColor: '#ff7315',
-    borderRadius: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
+  // New styles for the logo image
+  logoImage: {
+    width: 130,
+    height: 130,
+    borderRadius: 32,
     marginBottom: 10,
-    elevation: 50, // Adds shadow for Android
-    shadowColor: '#ff7315', // Shadow for iOS
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 10,
-  },
-  questionBadge: {
-    position: 'absolute',
-    top: -8,
-    right: -8,
-    width: 32,
-    height: 32,
-    backgroundColor: '#4ecca3',
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    transform: [{ rotate: '12deg' }],
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    elevation: 8, // Android shadow
+    shadowColor: '#000', // iOS shadow
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  questionText: {
-    color: '#10352a',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  eyesContainer: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  eyeBg: {
-    width: 24,
-    height: 24,
-    backgroundColor: '#2a1b38',
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  eyePupil: {
-    width: 10,
-    height: 10,
-    backgroundColor: '#ff7315',
-    borderRadius: 5,
+    shadowRadius: 8,
   },
   mainTitle: {
     fontSize: 64,

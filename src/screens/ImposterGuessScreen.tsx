@@ -106,7 +106,7 @@ export default function ImposterGuessScreen({ navigation }: any) {
                     <View style={styles.progressPill}>
                         <HelpCircle size={16} color="#4ecca3" />
                         <Text style={styles.progressPillText}>
-                            توقع الضايع {imposterIndex + 1} من {totalImposters}
+                            توقع الضائع {imposterIndex + 1} من {totalImposters}
                         </Text>
                     </View>
                 </View>
@@ -193,6 +193,7 @@ const styles = StyleSheet.create({
         color: '#b9a6cc',
         fontSize: 14,
         fontWeight: 'bold',
+        paddingBottom: 1
     },
     voterSection: {
         alignItems: 'center',
@@ -212,6 +213,7 @@ const styles = StyleSheet.create({
         color: '#ff7315',
         marginBottom: 16,
         textAlign: 'center',
+        paddingBottom: 2
     },
     voterSubtitle: {
         fontSize: 16,

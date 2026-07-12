@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
     suspenseSubtitle: {
         fontSize: 16,
         color: '#b9a6cc',
+        paddingBottom: 1
     },
 
     // Reveal styles
@@ -245,6 +246,7 @@ const styles = StyleSheet.create({
         marginBottom: 32,
         textAlign: 'center',
         lineHeight: 68,
+        paddingBottom: 6
     },
     categoryBadge: {
         backgroundColor: '#2a1b38',
@@ -281,5 +283,6 @@ const styles = StyleSheet.create({
         color: '#2a1b38',
         fontSize: 18,
         fontWeight: 'bold',
+        paddingBottom: 2
     },
 });
