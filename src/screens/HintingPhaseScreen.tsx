@@ -9,21 +9,24 @@ import {
 } from 'react-native';
 import { ArrowLeft, Vote, Eye, EyeOff, Lightbulb, ChevronRight } from 'lucide-react-native';
 
-// استدعاء الذاكرة المركزية وخدمات قاعدة البيانات
+// Import central state and database services
 import { useGame } from '../context/GameContext';
 import { initDB, getCategories } from '../services/DatabaseService';
 
 export default function HintingPhaseScreen({ navigation }: any) {
-    // سحب اللاعبين والـ ID الخاص بالفئة من الذاكرة المركزية
+    // Extract players and category ID from central state
     const { players, selectedCategoryId } = useGame();
 
     const [index, setIndex] = useState(0);
     const [categoryRevealed, setCategoryRevealed] = useState(false);
     const [everyoneHinted, setEveryoneHinted] = useState(false);
     const [round, setRound] = useState(1);
-    const [categoryName, setCategoryName] = useState("جاري التحميل..."); // حالة جديدة لاسم الفئة
+    const [categoryName, setCategoryName] = useState("جاري التحميل...");
 
-    // جلب اسم الفئة الحقيقي من قاعدة البيانات
+    // New state to hold the randomized order of players for the current round
+    const [shuffledPlayers, setShuffledPlayers] = useState<string[]>([]);
+
+    // Fetch the actual category name from the database
     useEffect(() => {
         const fetchCategory = async () => {
             if (selectedCategoryId) {
@@ -42,19 +45,28 @@ export default function HintingPhaseScreen({ navigation }: any) {
         fetchCategory();
     }, [selectedCategoryId]);
 
-    // تأمين المصفوفة في حال كانت فارغة بالخطأ
-    const safePlayers = players && players.length > 0 ? players : ["لاعب غير معروف"];
-    const total = safePlayers.length;
-    const currentPlayer = safePlayers[index];
+    // Shuffle players randomly when the component mounts or players list changes
+    useEffect(() => {
+        if (players && players.length > 0) {
+            // Create a copy of the array and shuffle it using Math.random
+            const randomized = [...players].sort(() => Math.random() - 0.5);
+            setShuffledPlayers(randomized);
+        } else {
+            setShuffledPlayers(["لاعب غير معروف"]);
+        }
+    }, [players]);
 
-    // حركة التلاشي السلسة عند تغيير اللاعب
+    const total = shuffledPlayers.length;
+    const currentPlayer = shuffledPlayers[index] || "جاري التحميل...";
+
+    // Smooth fade animation when changing player
     const fadeAnim = useRef(new Animated.Value(1)).current;
 
     const handleNextPlayer = () => {
-        // إخفاء الفئة تلقائياً لحماية دور اللاعب التالي
+        // Auto-hide the category to protect the next player's turn
         setCategoryRevealed(false);
 
-        // تشغيل حركة التلاشي السلسة
+        // Run the smooth fade animation
         Animated.sequence([
             Animated.timing(fadeAnim, {
                 toValue: 0,
@@ -68,13 +80,13 @@ export default function HintingPhaseScreen({ navigation }: any) {
             })
         ]).start();
 
-        // تغيير اللاعب والتحقق من اكتمال الجولة في منتصف الأنميشن
+        // Change player and check for round completion in the middle of the animation
         setTimeout(() => {
             if (index === total - 1) {
-                setEveryoneHinted(true); // أصبح زر التصويت متاحاً الآن
-                setRound((prev) => prev + 1); // الانتقال للجولة التالية
+                setEveryoneHinted(true); // Voting button becomes active
+                setRound((prev) => prev + 1); // Move to the next round
             }
-            setIndex((prev) => (prev + 1) % total); // تكرار الأسماء إلى مالانهاية
+            setIndex((prev) => (prev + 1) % total); // Loop names infinitely
         }, 150);
     };
 
@@ -89,24 +101,13 @@ export default function HintingPhaseScreen({ navigation }: any) {
 
                 {/* Header */}
                 <View style={styles.header}>
-                    {/* <TouchableOpacity
-                        style={styles.backButton}
-                        onPress={() => navigation.goBack()}
-                        activeOpacity={0.7}
-                    >
-                        <ChevronRight size={24} color="#f6eefb" />
-                    </TouchableOpacity> */}
-
                     <Text style={styles.title}>وقت التلميحات</Text>
-
-                    {/* عنصر فارغ للحفاظ على توسيط العنوان */}
-                    {/*<View style={{ width: 40 }} />*/}
                 </View>
 
                 {/* Content */}
                 <View style={styles.content}>
 
-                    {/* كشف وإخفاء الفئة */}
+                    {/* Toggle Category Visibility */}
                     <TouchableOpacity
                         activeOpacity={0.8}
                         onPress={() => setCategoryRevealed(!categoryRevealed)}
@@ -125,14 +126,14 @@ export default function HintingPhaseScreen({ navigation }: any) {
                         )}
                     </TouchableOpacity>
 
-                    {/* رقم الجولة */}
+                    {/* Round Badge */}
                     <View style={styles.roundBadgeContainer}>
                         <View style={styles.roundBadge}>
                             <Text style={styles.roundBadgeText}>الجولة {round}</Text>
                         </View>
                     </View>
 
-                    {/* بطاقة اللاعب الحالي */}
+                    {/* Current Player Card */}
                     <View style={styles.cardWrapper}>
                         <Animated.View style={[styles.activePlayerCard, { opacity: fadeAnim }]}>
 
@@ -156,7 +157,7 @@ export default function HintingPhaseScreen({ navigation }: any) {
                 <View style={styles.footer}>
                     <View style={styles.footerButtonsRow}>
 
-                        {/* زر اللاعب التالي */}
+                        {/* Next Player Button */}
                         <TouchableOpacity
                             activeOpacity={0.8}
                             style={styles.nextButton}
@@ -166,7 +167,7 @@ export default function HintingPhaseScreen({ navigation }: any) {
                             <Text style={styles.nextButtonText}>اللاعب التالي</Text>
                         </TouchableOpacity>
 
-                        {/* زر إنهاء والتصويت */}
+                        {/* End & Vote Button */}
                         <TouchableOpacity
                             disabled={!everyoneHinted}
                             activeOpacity={0.8}
