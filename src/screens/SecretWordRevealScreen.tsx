@@ -82,7 +82,7 @@ export default function SecretWordRevealScreen({ navigation }: any) {
     const displayWord = secretWord || "كلمة مجهولة";
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.root}>
             <View style={styles.container}>
 
                 {!isRevealed ? (
@@ -112,9 +112,7 @@ export default function SecretWordRevealScreen({ navigation }: any) {
                                     }
                                 ]}
                             >
-                                <View style={styles.wordBadge}>
-                                    <Sparkles size={24} color="#2a1b38" />
-                                </View>
+
 
                                 <Text style={styles.revealSubtitle}>الكلمة السرية كانت...</Text>
                                 <Text style={styles.secretWordText}>{displayWord}</Text>
@@ -148,15 +146,16 @@ export default function SecretWordRevealScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-    safeArea: {
+    root: {
         flex: 1,
         backgroundColor: '#2a1b38',
     },
     container: {
         flex: 1,
-        maxWidth: 400,
+        maxWidth: 650,
         width: '100%',
         alignSelf: 'center',
+        backgroundColor: '#2a1b38',
     },
 
     // Suspense styles
@@ -211,6 +210,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 24,
     },
     revealCard: {
+        justifyContent: 'center',
         width: '100%',
         backgroundColor: '#ff7315', // Vibrant orange card for the ultimate word reveal
         borderRadius: 32,
@@ -222,6 +222,10 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 16 },
         shadowOpacity: 0.4,
         shadowRadius: 32,
+        maxHeight: 550,
+        maxWidth: 950,
+        height: '55%',
+
     },
     wordBadge: {
         width: 64,
@@ -246,7 +250,7 @@ const styles = StyleSheet.create({
         marginBottom: 32,
         textAlign: 'center',
         lineHeight: 68,
-        paddingBottom: 6
+        paddingBottom: 20
     },
     categoryBadge: {
         backgroundColor: '#2a1b38',

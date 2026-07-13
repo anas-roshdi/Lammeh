@@ -14,69 +14,80 @@ import SettingsModal from '../components/SettingsModal';
 export default function HomeScreen({ navigation }: any) {
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#2a1b38" />
+    <SafeAreaView style={styles.root}>
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor="#2a1b38" />
 
-      {/* Top Bar Navigation */}
-      <View style={styles.header}>
-        {/* Players Count Badge */}
-        <View style={styles.playersBadge}>
-          <Users size={16} color="#4ecca3" />
-          <Text style={styles.playersText}>٣-١٢ لاعب</Text>
-        </View>
+        {/* Top Bar Navigation */}
+        <View style={styles.header}>
+          {/* Players Count Badge */}
+          <View style={styles.playersBadge}>
+            <Users size={16} color="#4ecca3" />
+            <Text style={styles.playersText}>٣-١٢ لاعب</Text>
+          </View>
 
-        {/* Settings Button */}
-        <TouchableOpacity
-          style={styles.settingsButton}
-          onPress={() => setIsSettingsVisible(true)}
-        >
-          <Settings size={20} color="#b9a6cc" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Main Content Area */}
-      <View style={styles.content}>
-        <GameTitle />
-
-        {/* Action Buttons */}
-        <View style={styles.buttonsContainer}>
+          {/* Settings Button */}
           <TouchableOpacity
-            style={styles.primaryButton}
-            onPress={() => navigation.navigate('CategorySelection')}
-            activeOpacity={0.8}
+            style={styles.settingsButton}
+            onPress={() => setIsSettingsVisible(true)}
           >
-            <Play size={24} fill="#2a1b38" color="#2a1b38" />
-            <Text style={styles.primaryButtonText}>ابدأ اللعب</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate('HowToPlay')}
-            style={styles.secondaryButton}
-            activeOpacity={0.7}
-          >
-            <HelpCircle size={20} color="#4ecca3" />
-            <Text style={styles.secondaryButtonText}>كيف تلعب</Text>
+            <Settings size={20} color="#b9a6cc" />
           </TouchableOpacity>
         </View>
-      </View>
 
-      {/* Footer Version Info */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>الإصدار ١.٠ — العب مع أصدقائك</Text>
-        <Text style={styles.footerText}>Created by Anoosyhero</Text>
+        {/* Main Content Area */}
+        <View style={styles.content}>
+          <GameTitle />
+
+          {/* Action Buttons */}
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              style={styles.primaryButton}
+              onPress={() => navigation.navigate('CategorySelection')}
+              activeOpacity={0.8}
+            >
+              <Play size={24} fill="#2a1b38" color="#2a1b38" />
+              <Text style={styles.primaryButtonText}>ابدأ اللعب</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate('HowToPlay')}
+              style={styles.secondaryButton}
+              activeOpacity={0.7}
+            >
+              <HelpCircle size={20} color="#4ecca3" />
+              <Text style={styles.secondaryButtonText}>كيف تلعب</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Footer Version Info */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>الإصدار ١.٠ — العب مع أصدقائك</Text>
+          <Text style={styles.footerText}>Created by Anoosyhero</Text>
+        </View>
+        <SettingsModal
+          visible={isSettingsVisible}
+          onClose={() => setIsSettingsVisible(false)}
+        />
       </View>
-      <SettingsModal
-        visible={isSettingsVisible}
-        onClose={() => setIsSettingsVisible(false)}
-      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: '#2a1b38',
+  },
+  // Centers the app content and limits its maximum width
   container: {
     flex: 1,
-    backgroundColor: '#2a1b38', // Playful Dark Background
+    width: '100%',
+    maxWidth: 650,
+    alignSelf: 'center',
+    backgroundColor: '#2a1b38',
+    // Keep your other existing styles below (padding, alignment, etc.)
   },
   header: {
     flexDirection: 'row',

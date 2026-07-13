@@ -1,6 +1,9 @@
 {
   "expo": {
-    "name": "",
+    "name": "لمّح",
+    "slug": "lammeh",
+    "version": "1.0.0",
+    "orientation": "portrait",
     "backgroundColor": "#2a1b38",
     "icon": "./assets/icon.png",
     "splash": {
@@ -9,6 +12,8 @@
       "backgroundColor": "#2a1b38"
     },
     "android": {
+      "package": "com.anoosyhero.lammeh",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#2a1b38"
@@ -23,6 +28,11 @@
     "plugins": [
       "expo-sqlite",
       "expo-asset"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "1439cffe-9bef-4943-9d25-ece45d275529"
+      }
+    }
   }
 }

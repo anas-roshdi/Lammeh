@@ -63,7 +63,7 @@ export default function VotingPhaseScreen({ navigation }: any) {
     };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.root}>
             <View style={styles.container}>
 
                 {/* Header - زر الرجوع في اليمين */}
@@ -120,15 +120,16 @@ export default function VotingPhaseScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-    safeArea: {
+    root: {
         flex: 1,
         backgroundColor: '#2a1b38',
     },
     container: {
         flex: 1,
-        maxWidth: 400,
+        maxWidth: 650,
         width: '100%',
         alignSelf: 'center',
+        backgroundColor: '#2a1b38',
     },
     header: {
         flexDirection: 'row-reverse',
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
         color: '#ff7315',
         marginBottom: 16,
         textAlign: 'center',
-        paddingBottom: 2
+        paddingBottom: 8
     },
     voterSubtitle: {
         fontSize: 16,

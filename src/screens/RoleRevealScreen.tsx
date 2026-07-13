@@ -7,12 +7,15 @@ import {
     SafeAreaView,
     Animated,
     Pressable,
-    ActivityIndicator // تمت إضافة هذا المكون
+    ActivityIndicator
 } from 'react-native';
 import { ChevronRight, Eye, EyeOff, Lock, ArrowLeft } from 'lucide-react-native';
-
+import * as Haptics from 'expo-haptics';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGame } from '../context/GameContext';
 import { initDB, getRandomWord, getCategories } from '../services/DatabaseService';
+import { Audio } from 'expo-av';
+
 
 const HOLD_DURATION = 1100;
 
@@ -93,15 +96,50 @@ export default function RoleRevealScreen({ navigation }: any) {
             ? "اكتشف الكلمة السرية دون أن ينكشف أمرك"
             : "أنت داخل السالفة، لمح لها بذكاء",
     };
+    const playRevealSound = async () => {
+        try {
+            const savedSound = await AsyncStorage.getItem('isSoundEnabled');
 
+            // Play sound if setting is true or not set yet (default true)
+            if (savedSound === null || savedSound === 'true') {
+                const { sound } = await Audio.Sound.createAsync(
+                    require('../../assets/sounds/reveal.mp3') // Make sure this path matches your project structure
+                );
+
+                await sound.playAsync();
+
+                // Clean up the sound from memory after it finishes playing
+                sound.setOnPlaybackStatusUpdate((status) => {
+                    if (status.isLoaded && status.didJustFinish) {
+                        sound.unloadAsync();
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error playing reveal sound: ', error);
+        }
+    };
     const handlePressIn = () => {
         if (revealed) return;
+
         Animated.timing(holdProgress, {
             toValue: 1,
             duration: HOLD_DURATION,
             useNativeDriver: false,
-        }).start(({ finished }) => {
-            if (finished) setRevealed(true);
+        }).start(async ({ finished }) => {
+            if (finished) {
+                // Reveal the card
+                setRevealed(true);
+
+                // 1. Trigger haptic feedback if enabled
+                const savedVibration = await AsyncStorage.getItem('isVibrationEnabled');
+                if (savedVibration === null || savedVibration === 'true') {
+                    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                }
+
+                // 2. Play the sound effect if enabled
+                await playRevealSound();
+            }
         });
     };
 
@@ -142,7 +180,7 @@ export default function RoleRevealScreen({ navigation }: any) {
     // إضافة مؤشر تحميل واضح بدلاً من الشاشة الفارغة
     if (isLoading) {
         return (
-            <SafeAreaView style={styles.safeArea}>
+            <SafeAreaView style={styles.root}>
                 <View style={[styles.container, { alignItems: 'center', justifyContent: 'center' }]}>
                     <ActivityIndicator size="large" color="#ff7315" />
                     <Text style={{ color: '#b9a6cc', marginTop: 16 }}>جاري تجهيز السالفة وتوزيع الأدوار...</Text>
@@ -152,7 +190,7 @@ export default function RoleRevealScreen({ navigation }: any) {
     }
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.root}>
             <View style={styles.container}>
                 {/* Top bar */}
                 <View style={styles.header}>
@@ -250,13 +288,13 @@ export default function RoleRevealScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-    safeArea: {
+    root: {
         flex: 1,
         backgroundColor: '#2a1b38',
     },
     container: {
         flex: 1,
-        maxWidth: 400,
+        maxWidth: 650,
         width: '100%',
         alignSelf: 'center',
     },
@@ -333,11 +371,12 @@ const styles = StyleSheet.create({
         fontSize: 36,
         fontWeight: '900',
         color: '#f6eefb',
-        paddingBottom: 2
+        paddingBottom: 5
     },
     cardWrapper: {
         width: '100%',
-        maxWidth: 300,
+        maxHeight: 650,
+        maxWidth: 650,
         aspectRatio: 3 / 4,
         marginTop: 32,
     },
@@ -405,11 +444,15 @@ const styles = StyleSheet.create({
     },
 
     roleText: {
+        textAlign: 'center',
+        flexShrink: 1,
+        flexWrap: 'wrap',
+        width: '100%',
         fontSize: 48,
         fontWeight: '900',
         color: '#f6eefb',
         marginBottom: 16,
-        paddingBottom: 3
+        paddingBottom: 7
     },
     roleHint: {
         fontSize: 14,

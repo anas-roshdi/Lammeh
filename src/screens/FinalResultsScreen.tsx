@@ -51,7 +51,7 @@ export default function FinalResultsScreen({ navigation }: any) {
     };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.root}>
             <View style={styles.container}>
 
                 {/* Header */}
@@ -137,15 +137,17 @@ export default function FinalResultsScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-    safeArea: {
+    root: {
         flex: 1,
         backgroundColor: '#2a1b38',
     },
     container: {
         flex: 1,
-        maxWidth: 400,
+        maxWidth: 650,
         width: '100%',
         alignSelf: 'center',
+        backgroundColor: '#2a1b38',
+
     },
 
     // Header Styles

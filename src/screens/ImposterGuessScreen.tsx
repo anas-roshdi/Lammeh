@@ -85,20 +85,20 @@ export default function ImposterGuessScreen({ navigation }: any) {
     }
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.root}>
             <View style={styles.container}>
 
                 {/* Header */}
                 <View style={styles.header}>
-                    <TouchableOpacity
+                    {/*<TouchableOpacity
                         style={styles.backButton}
                         onPress={() => navigation.goBack()}
                         activeOpacity={0.7}
                     >
                         <ChevronRight size={24} color="#f6eefb" />
-                    </TouchableOpacity>
+                    </TouchableOpacity>*/}
                     <Text style={styles.title}>توقع الكلمة السرية</Text>
-                    <View style={styles.spacer} />
+                    {/* <View style={styles.spacer} /> */}
                 </View>
 
                 {/* Progress indicator */}
@@ -142,15 +142,16 @@ export default function ImposterGuessScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-    safeArea: {
+    root: {
         flex: 1,
         backgroundColor: '#2a1b38',
     },
     container: {
         flex: 1,
-        maxWidth: 400,
+        maxWidth: 650,
         width: '100%',
         alignSelf: 'center',
+        backgroundColor: '#2a1b38',
     },
     header: {
         flexDirection: 'row-reverse',
@@ -159,6 +160,7 @@ const styles = StyleSheet.create({
         paddingTop: 45,
         paddingHorizontal: 24,
         paddingBottom: 16,
+        justifyContent: 'center',
     },
     backButton: {
         width: 40,
@@ -172,6 +174,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#f6eefb',
+        paddingBottom: 2
     },
     spacer: {
         width: 40,
@@ -197,7 +200,7 @@ const styles = StyleSheet.create({
     },
     voterSection: {
         alignItems: 'center',
-        marginTop: 40,
+        marginTop: 20,
         marginBottom: 32,
         paddingHorizontal: 24,
     },
@@ -205,7 +208,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
         color: '#b9a6cc',
-        marginBottom: 8,
+        marginBottom: 3,
+        paddingBottom: 5
     },
     voterName: {
         fontSize: 48,
@@ -213,7 +217,7 @@ const styles = StyleSheet.create({
         color: '#ff7315',
         marginBottom: 16,
         textAlign: 'center',
-        paddingBottom: 2
+        paddingBottom: 7
     },
     voterSubtitle: {
         fontSize: 16,
@@ -241,5 +245,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#f6eefb',
+        paddingBottom: 3
     },
 });

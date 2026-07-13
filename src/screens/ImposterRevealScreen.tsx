@@ -67,7 +67,7 @@ export default function ImposterRevealScreen({ navigation }: any) {
     const isMultiple = safeImposters.length > 1;
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.root}>
             <View style={styles.container}>
 
                 {!isRevealed ? (
@@ -121,14 +121,7 @@ export default function ImposterRevealScreen({ navigation }: any) {
                                     ))}
                                 </View>
 
-                                <View style={[styles.statusBadge, WAS_CAUGHT ? styles.statusCaught : styles.statusEscaped]}>
-                                    <Text style={[styles.statusText, WAS_CAUGHT ? styles.statusTextCaught : styles.statusTextEscaped]}>
-                                        {WAS_CAUGHT
-                                            ? (isMultiple ? "تم كشفهم بنجاح! 🎯" : "تم كشفه بنجاح! 🎯")
-                                            : (isMultiple ? "نجوا منكم وخدعوكم! 🏃‍♂️" : "نجا منكم وخدعكم! 🏃‍♂️")
-                                        }
-                                    </Text>
-                                </View>
+
                             </Animated.View>
                         </View>
 
@@ -153,15 +146,16 @@ export default function ImposterRevealScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-    safeArea: {
+    root: {
         flex: 1,
         backgroundColor: '#2a1b38',
     },
     container: {
         flex: 1,
-        maxWidth: 400,
+        maxWidth: 650,
         width: '100%',
         alignSelf: 'center',
+        backgroundColor: '#2a1b38',
     },
     suspenseContainer: {
         flex: 1,
@@ -211,6 +205,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 24,
     },
     revealCard: {
+        justifyContent: 'center',
         width: '100%',
         backgroundColor: '#ff4b4b',
         borderRadius: 32,
@@ -222,6 +217,10 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 16 },
         shadowOpacity: 0.4,
         shadowRadius: 32,
+        maxHeight: 550,
+        maxWidth: 650,
+        height: '55%',
+
     },
     imposterBadge: {
         width: 64,
@@ -250,7 +249,7 @@ const styles = StyleSheet.create({
         fontWeight: '900',
         color: '#ffffff',
         textAlign: 'center',
-        paddingBottom: 10
+        paddingBottom: 15
     },
     singleNameStyle: {
         fontSize: 60,
@@ -261,21 +260,13 @@ const styles = StyleSheet.create({
         lineHeight: 50,
         marginVertical: 4,
     },
-    statusBadge: {
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderRadius: 16,
-    },
     statusCaught: {
         backgroundColor: 'rgba(246, 238, 251, 0.2)',
     },
     statusEscaped: {
         backgroundColor: '#2a1b38',
     },
-    statusText: {
-        fontSize: 15,
-        fontWeight: 'bold',
-    },
+
     statusTextCaught: {
         color: '#ffffff',
     },

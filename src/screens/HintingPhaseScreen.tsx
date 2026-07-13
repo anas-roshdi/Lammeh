@@ -84,23 +84,23 @@ export default function HintingPhaseScreen({ navigation }: any) {
     };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.root}>
             <View style={styles.container}>
 
                 {/* Header */}
                 <View style={styles.header}>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         style={styles.backButton}
                         onPress={() => navigation.goBack()}
                         activeOpacity={0.7}
                     >
                         <ChevronRight size={24} color="#f6eefb" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <Text style={styles.title}>وقت التلميحات</Text>
 
                     {/* عنصر فارغ للحفاظ على توسيط العنوان */}
-                    <View style={{ width: 40 }} />
+                    {/*<View style={{ width: 40 }} />*/}
                 </View>
 
                 {/* Content */}
@@ -194,15 +194,16 @@ export default function HintingPhaseScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-    safeArea: {
+    root: {
         flex: 1,
         backgroundColor: '#2a1b38',
     },
     container: {
         flex: 1,
-        maxWidth: 400,
+        maxWidth: 650,
         width: '100%',
         alignSelf: 'center',
+        backgroundColor: '#2a1b38',
     },
     header: {
         flexDirection: 'row-reverse',
@@ -226,6 +227,8 @@ const styles = StyleSheet.create({
         color: '#f6eefb',
         flex: 1,
         textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     roundBadgeContainer: {
         alignItems: 'center',
@@ -277,9 +280,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         paddingBottom: 70,
+
+
     },
     activePlayerCard: {
         alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: '#3a2650',
         borderRadius: 32,
         paddingVertical: 50,
@@ -291,6 +297,11 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 12 },
         shadowOpacity: 0.25,
         shadowRadius: 24,
+        width: '100%',
+        maxHeight: 550,
+        maxWidth: 650,
+        height: '85%',
+
     },
     nowHintingBadge: {
         flexDirection: 'row-reverse',
@@ -314,7 +325,7 @@ const styles = StyleSheet.create({
         color: '#f6eefb',
         marginBottom: 24,
         textAlign: 'center',
-        paddingBottom: 4
+        paddingBottom: 7
     },
     instructionText: {
         fontSize: 14,

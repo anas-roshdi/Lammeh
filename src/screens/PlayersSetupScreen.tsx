@@ -66,7 +66,7 @@ export default function PlayersSetupScreen({ navigation }: any) {
     }
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.root}>
             <KeyboardAvoidingView
                 style={styles.container}
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -205,15 +205,18 @@ export default function PlayersSetupScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-    safeArea: {
+    root: {
         flex: 1,
         backgroundColor: '#2a1b38',
     },
+    // Centers the app content and limits its maximum width
     container: {
         flex: 1,
-        maxWidth: 400,
         width: '100%',
+        maxWidth: 650,
         alignSelf: 'center',
+        backgroundColor: '#2a1b38',
+        // Keep your other existing styles below (padding, alignment, etc.)
     },
     header: {
         flexDirection: 'row-reverse',

@@ -3,6 +3,11 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { GameProvider } from './src/context/GameContext'; // Import the provider
+import { I18nManager } from 'react-native';
+
+// Force the app to use Left-to-Right layout so your custom design doesn't flip automatically
+I18nManager.allowRTL(false);
+I18nManager.forceRTL(false);
 
 // استدعاء الشاشات
 import HomeScreen from './src/screens/HomeScreen';

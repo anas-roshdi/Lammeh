@@ -15,7 +15,8 @@ export interface Word {
     word: string;
 }
 
-const DB_NAME = 'lammeh.db';
+// Updated Database Name for versioning
+const DB_NAME = 'lammeh_v2.db';
 let cachedDbInstance: SQLite.SQLiteDatabase | null = null;
 
 export const initDB = async (): Promise<SQLite.SQLiteDatabase | null> => {
@@ -34,14 +35,15 @@ export const initDB = async (): Promise<SQLite.SQLiteDatabase | null> => {
 
         const dbInfo = await FileSystem.getInfoAsync(dbPath);
         if (!dbInfo.exists) {
-            const asset = Asset.fromModule(require('../../assets/db/lammeh.db'));
+            // Update the require statement to point to the renamed file
+            const asset = Asset.fromModule(require('../../assets/db/lammeh_v2.db'));
             await asset.downloadAsync();
 
             await FileSystem.copyAsync({
                 from: asset.localUri || asset.uri,
                 to: dbPath,
             });
-            console.log('Database copied to local storage successfully.');
+            console.log('Database v2 copied to local storage successfully.');
         }
 
         cachedDbInstance = await SQLite.openDatabaseAsync(DB_NAME);

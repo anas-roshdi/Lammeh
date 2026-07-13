@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Modal,
     View,
@@ -9,6 +9,7 @@ import {
     TouchableWithoutFeedback
 } from 'react-native';
 import { X, Volume2, Vibrate } from 'lucide-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type SettingsModalProps = {
     visible: boolean;
@@ -16,9 +17,47 @@ type SettingsModalProps = {
 };
 
 export default function SettingsModal({ visible, onClose }: SettingsModalProps) {
-    // الحالات الافتراضية للإعدادات (يمكنك لاحقاً ربطها بـ AsyncStorage لحفظها)
     const [soundEnabled, setSoundEnabled] = useState(true);
     const [vibrationEnabled, setVibrationEnabled] = useState(true);
+
+    // تحميل الإعدادات المحفوظة فور فتح النافذة
+    useEffect(() => {
+        if (visible) {
+            loadSettings();
+        }
+    }, [visible]);
+
+    const loadSettings = async () => {
+        try {
+            const savedSound = await AsyncStorage.getItem('isSoundEnabled');
+            const savedVibration = await AsyncStorage.getItem('isVibrationEnabled');
+
+            if (savedSound !== null) setSoundEnabled(savedSound === 'true');
+            if (savedVibration !== null) setVibrationEnabled(savedVibration === 'true');
+        } catch (error) {
+            console.error('Error loading settings:', error);
+        }
+    };
+
+    // حفظ إعدادات الصوت
+    const toggleSound = async (value: boolean) => {
+        setSoundEnabled(value);
+        try {
+            await AsyncStorage.setItem('isSoundEnabled', String(value));
+        } catch (error) {
+            console.error('Error saving sound setting:', error);
+        }
+    };
+
+    // حفظ إعدادات الاهتزاز
+    const toggleVibration = async (value: boolean) => {
+        setVibrationEnabled(value);
+        try {
+            await AsyncStorage.setItem('isVibrationEnabled', String(value));
+        } catch (error) {
+            console.error('Error saving vibration setting:', error);
+        }
+    };
 
     return (
         <Modal
@@ -27,11 +66,8 @@ export default function SettingsModal({ visible, onClose }: SettingsModalProps) 
             animationType="fade"
             onRequestClose={onClose}
         >
-            {/* الضغط على الخلفية الشفافة يغلق النافذة */}
             <TouchableWithoutFeedback onPress={onClose}>
                 <View style={styles.overlay}>
-
-                    {/* محتوى النافذة المنبثقة */}
                     <TouchableWithoutFeedback>
                         <View style={styles.modalContent}>
 
@@ -58,7 +94,7 @@ export default function SettingsModal({ visible, onClose }: SettingsModalProps) 
                                         trackColor={{ false: '#472e63', true: '#4ecca3' }}
                                         thumbColor="#f6eefb"
                                         ios_backgroundColor="#472e63"
-                                        onValueChange={setSoundEnabled}
+                                        onValueChange={toggleSound}
                                         value={soundEnabled}
                                     />
                                 </View>
@@ -78,21 +114,20 @@ export default function SettingsModal({ visible, onClose }: SettingsModalProps) 
                                         trackColor={{ false: '#472e63', true: '#4ecca3' }}
                                         thumbColor="#f6eefb"
                                         ios_backgroundColor="#472e63"
-                                        onValueChange={setVibrationEnabled}
+                                        onValueChange={toggleVibration}
                                         value={vibrationEnabled}
                                     />
                                 </View>
 
                             </View>
-
                         </View>
                     </TouchableWithoutFeedback>
-
                 </View>
             </TouchableWithoutFeedback>
         </Modal>
     );
 }
+
 
 const styles = StyleSheet.create({
     overlay: {
