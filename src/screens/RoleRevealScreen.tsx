@@ -16,11 +16,11 @@ import { useGame } from '../context/GameContext';
 import { initDB, getRandomWord, getCategories } from '../services/DatabaseService';
 import { Audio } from 'expo-av';
 
-
 const HOLD_DURATION = 1100;
 
 export default function RoleRevealScreen({ navigation }: any) {
-    const { players, impostersCount, selectedCategoryId, setSecretWord, setImposters, categoryPool, setSelectedCategoryId } = useGame();
+    // Add secretWord and imposters to the destructured context to use them for checks
+    const { players, impostersCount, selectedCategoryId, secretWord, imposters, setSecretWord, setImposters, categoryPool, setSelectedCategoryId } = useGame();
 
     const [isLoading, setIsLoading] = useState(true);
     const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
@@ -30,29 +30,30 @@ export default function RoleRevealScreen({ navigation }: any) {
 
     const holdProgress = useRef(new Animated.Value(0)).current;
 
+    // Ref to lock the fetch process and prevent double-fetching bugs
+    const isFetching = useRef(false);
+
     useEffect(() => {
         const setupRound = async () => {
+            // 1. Prevent duplicate executions caused by state re-renders
+            if (isFetching.current) return;
+            isFetching.current = true;
+
             try {
                 const db = await initDB();
                 if (db) {
                     let finalCategoryId = selectedCategoryId;
 
-                    // إذا لم يتم تحديد فئة لهذه الجولة بعد (بداية الجولة)
+                    // If a category hasn't been selected for this round yet
                     if (finalCategoryId === null) {
                         const cats = await getCategories(db);
-
-                        // تحديد السلة: إذا اختار فئات يدوية نستخدمها، وإلا نستخدم جميع الفئات
-                        let pool = categoryPool.length > 0 ? categoryPool : cats.map(c => c.id);
-
-                        // اختيار فئة عشوائية من السلة
+                        let pool = categoryPool.length > 0 ? categoryPool : cats.map((c: any) => c.id);
                         const randomIndex = Math.floor(Math.random() * pool.length);
                         finalCategoryId = pool[randomIndex];
-
-                        // حفظ هذه الفئة في الذاكرة لتستخدمها شاشة التلميح وكشف الكلمة
                         setSelectedCategoryId(finalCategoryId);
                     }
 
-                    // جلب الكلمة بناءً على الفئة التي تم اختيارها لهذه الجولة
+                    // Fetch the word based on the selected category
                     if (finalCategoryId) {
                         const word = await getRandomWord(db, finalCategoryId);
                         if (word) {
@@ -65,7 +66,7 @@ export default function RoleRevealScreen({ navigation }: any) {
                     }
                 }
 
-                // توزيع دور "الضايع" عشوائياً
+                // Randomly distribute the "imposter" role
                 const safePlayers = players && players.length > 0 ? [...players] : ["لاعب افتراضي"];
                 const shuffledPlayers = safePlayers.sort(() => 0.5 - Math.random());
                 const pickedImposters = shuffledPlayers.slice(0, impostersCount || 1);
@@ -74,15 +75,25 @@ export default function RoleRevealScreen({ navigation }: any) {
                 setImposters(pickedImposters);
 
             } catch (error) {
-                console.error("حدث خطأ أثناء إعداد الجولة:", error);
+                console.error("Error setting up the round:", error);
                 setLocalSecretWord('خطأ في النظام');
             } finally {
                 setIsLoading(false);
             }
         };
 
-        setupRound();
-    }, [players, impostersCount, selectedCategoryId, categoryPool]); // إضافة categoryPool هنا
+        // 2. Only run setup if we don't already have a secret word in the global context
+        if (!secretWord) {
+            setupRound();
+        } else {
+            // Sync local state to match the context and skip fetching
+            setLocalSecretWord(secretWord);
+            setLocalImposters(imposters);
+            setIsLoading(false);
+        }
+
+        // Include all necessary dependencies
+    }, [players, impostersCount, selectedCategoryId, categoryPool, secretWord, imposters]);
 
     const PLAYER_TOTAL = players?.length || 1;
     const PLAYER_INDEX = currentPlayerIndex + 1;
@@ -96,19 +107,18 @@ export default function RoleRevealScreen({ navigation }: any) {
             ? "اكتشف الكلمة السرية دون أن ينكشف أمرك"
             : "أنت داخل السالفة، لمح لها بذكاء",
     };
+
     const playRevealSound = async () => {
         try {
             const savedSound = await AsyncStorage.getItem('isSoundEnabled');
 
-            // Play sound if setting is true or not set yet (default true)
             if (savedSound === null || savedSound === 'true') {
                 const { sound } = await Audio.Sound.createAsync(
-                    require('../../assets/sounds/reveal.mp3') // Make sure this path matches your project structure
+                    require('../../assets/sounds/reveal.mp3')
                 );
 
                 await sound.playAsync();
 
-                // Clean up the sound from memory after it finishes playing
                 sound.setOnPlaybackStatusUpdate((status) => {
                     if (status.isLoaded && status.didJustFinish) {
                         sound.unloadAsync();
@@ -119,6 +129,7 @@ export default function RoleRevealScreen({ navigation }: any) {
             console.error('Error playing reveal sound: ', error);
         }
     };
+
     const handlePressIn = () => {
         if (revealed) return;
 
@@ -128,16 +139,13 @@ export default function RoleRevealScreen({ navigation }: any) {
             useNativeDriver: false,
         }).start(async ({ finished }) => {
             if (finished) {
-                // Reveal the card
                 setRevealed(true);
 
-                // 1. Trigger haptic feedback if enabled
                 const savedVibration = await AsyncStorage.getItem('isVibrationEnabled');
                 if (savedVibration === null || savedVibration === 'true') {
                     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                 }
 
-                // 2. Play the sound effect if enabled
                 await playRevealSound();
             }
         });
@@ -160,7 +168,6 @@ export default function RoleRevealScreen({ navigation }: any) {
             setCurrentPlayerIndex((prev) => prev + 1);
         } else {
             navigation.navigate('HintingPhase');
-            console.log("الانتقال إلى شاشة التلميحات...");
         }
     };
 
@@ -177,7 +184,6 @@ export default function RoleRevealScreen({ navigation }: any) {
         outputRange: [0, 25]
     });
 
-    // إضافة مؤشر تحميل واضح بدلاً من الشاشة الفارغة
     if (isLoading) {
         return (
             <SafeAreaView style={styles.root}>
@@ -192,7 +198,6 @@ export default function RoleRevealScreen({ navigation }: any) {
     return (
         <SafeAreaView style={styles.root}>
             <View style={styles.container}>
-                {/* Top bar */}
                 <View style={styles.header}>
                     <TouchableOpacity
                         style={styles.backButton}
@@ -209,7 +214,6 @@ export default function RoleRevealScreen({ navigation }: any) {
                     <View style={styles.spacer} />
                 </View>
 
-                {/* Progress dots */}
                 <View style={styles.dotsContainer}>
                     {Array.from({ length: PLAYER_TOTAL }).map((_, i) => (
                         <View
@@ -222,7 +226,6 @@ export default function RoleRevealScreen({ navigation }: any) {
                     ))}
                 </View>
 
-                {/* Main content */}
                 <View style={styles.mainContent}>
                     <Text style={styles.passSubtitle}>مرر الجوال إلى</Text>
                     <Text style={styles.playerName}>{PLAYER.name}</Text>
@@ -265,7 +268,6 @@ export default function RoleRevealScreen({ navigation }: any) {
                     </Pressable>
                 </View>
 
-                {/* Bottom sticky action */}
                 <View style={styles.footer}>
                     <TouchableOpacity
                         disabled={!passReady}

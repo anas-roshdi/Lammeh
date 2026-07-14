@@ -16,10 +16,12 @@ import { initDB, getCategories } from '../services/DatabaseService';
 export default function SecretWordRevealScreen({ navigation }: any) {
     // Fetch the secret word and category ID from the global state
     const { secretWord, selectedCategoryId } = useGame();
+    const [categoryName, setCategoryName] = useState("جاري التحميل...");
+    const [categoryIcon, setCategoryIcon] = useState("");
 
     // State to toggle between suspense and reveal phases
     const [isRevealed, setIsRevealed] = useState(false);
-    const [categoryName, setCategoryName] = useState("جاري التحميل...");
+
 
     // Animation values
     const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -33,11 +35,14 @@ export default function SecretWordRevealScreen({ navigation }: any) {
                 const db = await initDB();
                 if (db) {
                     const cats = await getCategories(db);
-                    const cat = cats.find(c => c.id === selectedCategoryId);
+                    const cat = cats.find((c: any) => c.id === selectedCategoryId);
                     if (cat) {
-                        setCategoryName(`${cat.name} ${cat.icon}`);
+                        // 2. Set them separately without mixing strings
+                        setCategoryName(cat.name);
+                        setCategoryIcon(cat.icon || "");
                     } else {
                         setCategoryName('فئة مجهولة');
+                        setCategoryIcon("");
                     }
                 }
             }
@@ -117,8 +122,9 @@ export default function SecretWordRevealScreen({ navigation }: any) {
                                 <Text style={styles.revealSubtitle}>الكلمة السرية كانت...</Text>
                                 <Text style={styles.secretWordText}>{displayWord}</Text>
 
-                                <View style={styles.categoryBadge}>
+                                <View style={[styles.categoryBadge, { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 }]}>
                                     <Text style={styles.categoryBadgeText}>من فئة: {categoryName}</Text>
+                                    {categoryIcon ? <Text style={styles.categoryBadgeText}>{categoryIcon}</Text> : null}
                                 </View>
                             </Animated.View>
                         </View>
