@@ -13,12 +13,11 @@ import { ArrowRight, Check, Dices } from 'lucide-react-native';
 import { initDB, getCategories, Category } from '../services/DatabaseService';
 
 export default function CategorySelectionScreen({ navigation }: any) {
-    const { setCategoryPool, setSelectedCategoryId } = useGame();
     const [categories, setCategories] = useState<Category[]>([]);
     // Change string[] to number[] for database IDs
     const [selected, setSelected] = useState<number[]>([]);
     const [random, setRandom] = useState(false);
-
+    const { setCategoryPool, setSelectedCategoryId, setSecretWord, setImposters } = useGame();
     // Fetch categories on mount
     useEffect(() => {
         const loadData = async () => {
@@ -133,6 +132,8 @@ export default function CategorySelectionScreen({ navigation }: any) {
                             // CRITICAL FIX: Reset the active round category ID 
                             // to force a fresh pick from the newly updated pool
                             setSelectedCategoryId(null);
+                            setSecretWord(null);
+                            setImposters([]);
 
                             navigation.navigate('PlayersSetup');
                         }}

@@ -32,6 +32,8 @@ export default function FinalResultsScreen({ navigation }: any) {
     };
 
     const handleChangeSettings = () => {
+        // إضافة هذا السطر لتصفير الكلمة السرية والضائعين قبل تغيير الفئة
+        nextRoundContext();
         // العودة لشاشة الفئات لتغيير الإعدادات
         navigation.navigate('CategorySelection');
     };
