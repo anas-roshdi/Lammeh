@@ -14,7 +14,7 @@ import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGame } from '../context/GameContext';
 import { initDB, getRandomWord, getCategories } from '../services/DatabaseService';
-import { Audio } from 'expo-av';
+import { useAudioPlayer } from 'expo-audio';
 
 const HOLD_DURATION = 1100;
 
@@ -32,6 +32,9 @@ export default function RoleRevealScreen({ navigation }: any) {
 
     // Ref to lock the fetch process and prevent double-fetching bugs
     const isFetching = useRef(false);
+
+    // Initialize expo-audio player for the reveal sound effect
+    const revealSound = useAudioPlayer(require('../../assets/sounds/reveal.mp3'));
 
     useEffect(() => {
         const setupRound = async () => {
@@ -113,17 +116,9 @@ export default function RoleRevealScreen({ navigation }: any) {
             const savedSound = await AsyncStorage.getItem('isSoundEnabled');
 
             if (savedSound === null || savedSound === 'true') {
-                const { sound } = await Audio.Sound.createAsync(
-                    require('../../assets/sounds/reveal.mp3')
-                );
-
-                await sound.playAsync();
-
-                sound.setOnPlaybackStatusUpdate((status) => {
-                    if (status.isLoaded && status.didJustFinish) {
-                        sound.unloadAsync();
-                    }
-                });
+                // Play sound using the new expo-audio API by seeking to start then playing
+                revealSound.seekTo(0);
+                revealSound.play();
             }
         } catch (error) {
             console.error('Error playing reveal sound: ', error);

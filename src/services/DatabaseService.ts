@@ -15,8 +15,7 @@ export interface Word {
     word: string;
 }
 
-// Updated Database Name for versioning
-const DB_NAME = 'lammeh_v2.db';
+const DB_NAME = 'lammeh_v14.db';
 let cachedDbInstance: SQLite.SQLiteDatabase | null = null;
 
 export const initDB = async (): Promise<SQLite.SQLiteDatabase | null> => {
@@ -35,18 +34,28 @@ export const initDB = async (): Promise<SQLite.SQLiteDatabase | null> => {
 
         const dbInfo = await FileSystem.getInfoAsync(dbPath);
         if (!dbInfo.exists) {
-            // Update the require statement to point to the renamed file
-            const asset = Asset.fromModule(require('../../assets/db/lammeh_v2.db'));
+            const asset = Asset.fromModule(require('../../assets/db/lammeh_v14.db'));
             await asset.downloadAsync();
 
             await FileSystem.copyAsync({
                 from: asset.localUri || asset.uri,
                 to: dbPath,
             });
-            console.log('Database v2 copied to local storage successfully.');
+            console.log('Database v14 copied to local storage successfully.');
         }
 
-        cachedDbInstance = await SQLite.openDatabaseAsync(DB_NAME);
+        // Strip 'file://' prefix so Android native SQLite can resolve the directory
+        const nativeDir = dbDir.replace('file://', '');
+
+        // Pass nativeDir as the 3rd argument to open the database from the copied location
+        cachedDbInstance = await SQLite.openDatabaseAsync(DB_NAME, {}, nativeDir);
+
+        // Verify tables loaded from the copied database
+        const tables = await cachedDbInstance.getAllAsync<{ name: string }>(
+            "SELECT name FROM sqlite_master WHERE type='table'"
+        );
+        console.log('--- TABLES DETECTED ---', tables);
+
         return cachedDbInstance;
     } catch (error) {
         console.error('--- DATABASE INIT ERROR ---', error);
@@ -58,7 +67,6 @@ export const getCategories = async (db: SQLite.SQLiteDatabase | null): Promise<C
     if (!db) return [];
 
     try {
-        // Explicitly run getAllAsync with no arguments to keep it safe
         return await db.getAllAsync<Category>('SELECT * FROM categories');
     } catch (error) {
         console.error('Error fetching categories: ', error);
@@ -70,7 +78,6 @@ export const getRandomWord = async (db: SQLite.SQLiteDatabase | null, categoryId
     if (!db) return null;
 
     try {
-        // Force convert categoryId to a safe standard number type to avoid native mapping errors
         const safeId = Number(categoryId);
         const result = await db.getFirstAsync<{ word: string }>(
             'SELECT word FROM words WHERE category_id = ? ORDER BY RANDOM() LIMIT 1',
