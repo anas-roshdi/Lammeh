@@ -1,10 +1,11 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, useEffect, useRef } from 'react';
 import {
     View,
     Text,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView,
+
     Animated
 } from 'react-native';
 import { Search, UserX, ArrowLeft } from 'lucide-react-native';
@@ -248,12 +249,12 @@ const styles = StyleSheet.create({
     imposterName: {
         fontWeight: '900',
         color: '#ffffff',
-        textAlign: 'center',
-        paddingBottom: 15
+        textAlign: 'center'
     },
     singleNameStyle: {
         fontSize: 60,
         lineHeight: 68,
+        paddingBottom: 60
     },
     multipleNamesStyle: {
         fontSize: 42,

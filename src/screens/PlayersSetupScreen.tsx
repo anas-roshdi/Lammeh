@@ -1,4 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useGame } from '../context/GameContext';
 import {
     View,
@@ -7,7 +9,7 @@ import {
     TouchableOpacity,
     ScrollView,
     StyleSheet,
-    SafeAreaView,
+
     KeyboardAvoidingView,
     Platform,
     Keyboard
@@ -31,6 +33,35 @@ export default function PlayersSetupScreen({ navigation }: any) {
         () => Math.min(localImposters, maxImposters),
         [localImposters, maxImposters]
     );
+
+
+    const PLAYERS_STORAGE_KEY = '@saved_players';
+
+    useEffect(() => {
+        const loadPlayers = async () => {
+            try {
+                const stored = await AsyncStorage.getItem(PLAYERS_STORAGE_KEY);
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        setLocalPlayers(parsed);
+                        setPlayers(parsed);
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to load players", e);
+            }
+        };
+        loadPlayers();
+    }, []);
+
+    const savePlayers = async (newPlayers: string[]) => {
+        try {
+            await AsyncStorage.setItem(PLAYERS_STORAGE_KEY, JSON.stringify(newPlayers));
+        } catch (e) {
+            console.error("Failed to save players", e);
+        }
+    };
 
     const handleStartGame = () => {
         if (localPlayers.length < 3) {
@@ -56,13 +87,18 @@ export default function PlayersSetupScreen({ navigation }: any) {
     function addPlayer() {
         const name = inputValue.trim();
         if (!name) return;
-        setLocalPlayers((prev) => [...prev, name]); // تم التصحيح هنا
+
+        const newPlayers = [...localPlayers, name];
+        setLocalPlayers(newPlayers);
+        savePlayers(newPlayers);
         setInputValue('');
         Keyboard.dismiss();
     }
 
     function removePlayer(index: number) {
-        setLocalPlayers((prev) => prev.filter((_, i) => i !== index)); // تم التصحيح هنا
+        const newPlayers = localPlayers.filter((_, i) => i !== index);
+        setLocalPlayers(newPlayers);
+        savePlayers(newPlayers);
     }
 
     return (
@@ -92,9 +128,22 @@ export default function PlayersSetupScreen({ navigation }: any) {
                 >
                     {/* Add Players Section */}
                     <View style={styles.section}>
-                        <View style={styles.sectionHeaderRow}>
-                            <Text style={styles.sectionTitle}>أضف اللاعبين</Text>
-                            <Text style={styles.sectionSubtitle}>(الحد الأدنى 3)</Text>
+                        <View style={[styles.sectionHeaderRow, { justifyContent: 'space-between' }]}>
+                            <View style={{ flexDirection: 'row-reverse', alignItems: 'center' }}>
+                                <Text style={styles.sectionTitle}>أضف اللاعبين</Text>
+                                <Text style={styles.sectionSubtitle}>(الحد الأدنى 3)</Text>
+                            </View>
+                            {localPlayers.length > 0 && (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setLocalPlayers([]);
+                                        savePlayers([]);
+                                    }}
+                                    style={styles.clearAllButton}
+                                >
+                                    <Text style={styles.clearAllText}>مسح الكل</Text>
+                                </TouchableOpacity>
+                            )}
                         </View>
 
                         <View style={styles.inputRow}>
@@ -274,6 +323,17 @@ const styles = StyleSheet.create({
     sectionSubtitle: {
         fontSize: 12,
         color: '#b9a6cc',
+    },
+    clearAllButton: {
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        backgroundColor: '#ff4b4b20',
+        borderRadius: 12,
+    },
+    clearAllText: {
+        fontSize: 12,
+        color: '#ff4b4b',
+        fontWeight: 'bold',
     },
     inputRow: {
         flexDirection: 'row-reverse',

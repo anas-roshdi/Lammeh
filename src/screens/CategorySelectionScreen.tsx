@@ -1,3 +1,4 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, useEffect } from 'react';
 import { useGame } from '../context/GameContext';
 import {
@@ -5,9 +6,7 @@ import {
     Text,
     TouchableOpacity,
     ScrollView,
-    StyleSheet,
-    SafeAreaView
-} from 'react-native';
+    StyleSheet } from 'react-native';
 import { ArrowRight, Check, Dices } from 'lucide-react-native';
 // Import database functions and types
 import { initDB, getCategories, Category } from '../services/DatabaseService';

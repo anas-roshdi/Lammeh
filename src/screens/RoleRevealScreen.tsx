@@ -1,10 +1,11 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, useRef, useEffect } from 'react';
 import {
     View,
     Text,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView,
+
     Animated,
     Pressable,
     ActivityIndicator
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row-reverse',
         justifyContent: 'center',
         gap: 8,
-        marginTop: 16,
+        marginTop: 8,
     },
     dot: {
         height: 6,
@@ -355,6 +356,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        marginTop: 10,
         paddingVertical: 32,
         paddingHorizontal: 30,
     },
@@ -368,14 +370,14 @@ const styles = StyleSheet.create({
         fontSize: 36,
         fontWeight: '900',
         color: '#f6eefb',
-        paddingBottom: 5
+        paddingBottom: 8
     },
     cardWrapper: {
         width: '100%',
         maxHeight: 650,
         maxWidth: 650,
         aspectRatio: 3 / 4,
-        marginTop: 32,
+        marginTop: 16,
     },
     secretCard: {
         flex: 1,
@@ -448,8 +450,7 @@ const styles = StyleSheet.create({
         fontSize: 48,
         fontWeight: '900',
         color: '#f6eefb',
-        marginBottom: 16,
-        paddingBottom: 7
+        paddingBottom: 40
     },
     roleHint: {
         fontSize: 14,

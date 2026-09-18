@@ -1,10 +1,11 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState } from 'react';
 import {
     View,
     Text,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView,
+
     ScrollView
 } from 'react-native';
 import { ChevronRight, Users } from 'lucide-react-native';

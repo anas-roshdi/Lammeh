@@ -1,12 +1,11 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, useEffect, useRef } from 'react';
-import {
-    View,
+import { View,
     Text,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView,
-    Animated
-} from 'react-native';
+    
+    Animated } from 'react-native';
 import { Sparkles, HelpCircle, ArrowLeft } from 'lucide-react-native';
 
 // Import Context and Database services

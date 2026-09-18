@@ -1,12 +1,11 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react';
-import {
-    View,
+import { View,
     Text,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView,
-    ScrollView
-} from 'react-native';
+    
+    ScrollView } from 'react-native';
 import {
     ChevronRight,
     Settings,

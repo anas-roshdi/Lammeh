@@ -1,10 +1,11 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, useRef, useEffect } from 'react';
 import {
     View,
     Text,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView,
+
     Animated
 } from 'react-native';
 import { ArrowLeft, Vote, Eye, EyeOff, Lightbulb, ChevronRight } from 'lucide-react-native';
@@ -324,9 +325,8 @@ const styles = StyleSheet.create({
         fontSize: 54,
         fontWeight: '900',
         color: '#f6eefb',
-        marginBottom: 24,
         textAlign: 'center',
-        paddingBottom: 7
+        paddingBottom: 40
     },
     instructionText: {
         fontSize: 14,

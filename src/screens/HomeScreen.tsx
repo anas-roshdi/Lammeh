@@ -1,12 +1,11 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState } from 'react';
-import {
-  View,
+import { View,
   Text,
   TouchableOpacity,
-  SafeAreaView,
+  
   StyleSheet,
-  StatusBar
-} from 'react-native';
+  StatusBar } from 'react-native';
 import { Play, HelpCircle, Settings, Users } from 'lucide-react-native';
 import { GameTitle } from '../components/GameTitle';
 import SettingsModal from '../components/SettingsModal';

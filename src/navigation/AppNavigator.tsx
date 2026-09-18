@@ -4,7 +4,7 @@ import { RootStackParamList } from '../types/navigation';
 
 // Import placeholder screens (We will build these in the UI phase)
 import HomeScreen from '../screens/HomeScreen';
-import SetupScreen from '../screens/SetupScreen';
+import PlayersSetupScreen from '../screens/PlayersSetupScreen';
 
 // Initialize the stack navigator
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -21,7 +21,7 @@ const AppNavigator = () => {
             {/* Game Setup Screen */}
             <Stack.Screen
                 name="Setup"
-                component={SetupScreen}
+                component={PlayersSetupScreen}
                 options={{ title: 'إعدادات اللعبة', headerTitleAlign: 'center' }}
             />
             {/* We will add the rest of the screens here as we build them */}

@@ -1,13 +1,12 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState, useEffect } from 'react';
-import {
-    View,
+import { View,
     Text,
     TouchableOpacity,
     StyleSheet,
-    SafeAreaView,
+    
     ScrollView,
-    ActivityIndicator
-} from 'react-native';
+    ActivityIndicator } from 'react-native';
 import { ChevronRight, HelpCircle } from 'lucide-react-native';
 
 // Import Context and Database services
@@ -76,7 +75,7 @@ export default function ImposterGuessScreen({ navigation }: any) {
 
     if (isLoading) {
         return (
-            <SafeAreaView style={styles.safeArea}>
+            <SafeAreaView style={styles.root}>
                 <View style={[styles.container, { alignItems: 'center', justifyContent: 'center' }]}>
                     <ActivityIndicator size="large" color="#4ecca3" />
                 </View>
@@ -156,11 +155,10 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row-reverse',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         paddingTop: 45,
         paddingHorizontal: 24,
         paddingBottom: 16,
-        justifyContent: 'center',
     },
     backButton: {
         width: 40,
