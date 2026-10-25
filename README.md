@@ -47,7 +47,7 @@ Lammeh is an engaging offline multiplayer social deduction game designed for fri
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/anas-roshdi/lammeh-app.git](https://github.com/anas-roshdi/lammeh-app.git)
+   git clone https://github.com/anas-roshdi/lammeh-app.git
 2. Navigate to the project directory:
    ```bash
    cd lammeh-app
