@@ -1,8 +1,7 @@
 # 🕵️‍♂️ Lammeh (لمّح) - Social Party Game
 
-<p align="center">
-[Download](https://play.google.com/store/apps/details?id=com.anoosyhero.lammeh) on GooglePlay
-</p>
+
+>[Download](https://play.google.com/store/apps/details?id=com.anoosyhero.lammeh) on GooglePlay
   
 <p align="center">
   <img src="screenshots/home.jpeg" alt="Lammeh Home Screen" width="300">
