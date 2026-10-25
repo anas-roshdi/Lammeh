@@ -41,7 +41,7 @@ Lammeh is an engaging offline multiplayer social deduction game designed for fri
 | :---: | :---: | :---: |
 | <img src="screenshots/Hinting.jpeg" width="250"> | <img src="screenshots/Guess.jpeg" width="250"> | <img src="screenshots/Results.jpeg" width="250"> |
 
-> **Note:** To see more images or download the latest release, visit the [Releases]([#](https://play.google.com/store/apps/details?id=com.anoosyhero.lammeh)) section.
+> **Note:** To see more images or download the latest release, visit the [Releases](https://play.google.com/store/apps/details?id=com.anoosyhero.lammeh) section.
 
 ## 🚀 Installation & Setup
 
